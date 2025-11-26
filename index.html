@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <textarea cols="50" rows="10" placeholder="Tutaj wpisz tekst do analizy..." id="user-input"></textarea>
+    <br>
+    <button onclick="analyze()">Analizuj</button>
+
+    <p>liczba słów: <span id="count-words"></span></p>
+    <p>liczba spacji w tekście: <span id="count-space"></span></p>
+    <p>liczba znaków: <span id="count-character"></span></p>
+    <p>liczba znaków (bez spacji): <span id="count-character-no-spaces"></span></p>
+    <p>szacowany czas czytania analizowanego tekstu to: <span id="read-time">0</span> sekund</p>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
