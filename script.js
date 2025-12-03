@@ -1,99 +1,70 @@
-// to się wykona tylko raz, przy załadowaniu strony
+// это выполнится только один раз, при загрузке страницы
 document.getElementById("count-words").innerText = 0
 document.getElementById("count-space").innerText = 0
 document.getElementById("count-character").innerText = 0
 document.getElementById("count-character-no-spaces").innerText = 0
 
 
-// funkcja nie wykona się, dopóki jej nie wywołamy.
-// Możemy używać jej ile razy chcemy
+// функция не выполнится, пока ее не вызовем.
+// Мы можем использовать ее сколько угодно раз
 function analyze() {
-    console.log("analizuję...")
+    console.log("анализирую...")
 
-    // pobierz wartość (value) z elementu o id "user-input"
+    // получить значение (value) из элемента с id "user-input"
     const text = document.getElementById("user-input").value
-    // const text = "abc abfdf asfasdf afsdf sadfsd"
 
-    // Funkcja trim() używana jest na String.
-    // Usuwa ona białe znaki (np. spacje) z końca i początku Stringa.
     const textTrimmed = text.trim()
-    // array - czyli tablica
-    const words = textTrimmed.split(" ")
 
-    // tablice można porównać do rzędu siedzeń w kinie - skupiamy się na pojedynczym rzędzie
-    // każdy taki rząd ma ponumerowane miejsca
-    // w programowaniu zazwyczaj takie rzędy zaczynamy liczyć od 0, a więc
-    // typowa tablica będzie wyglądać mniej więcej tak:
-    // [0, 1, 2, 3, 4] - tablica na 5 wartości (tutaj wypisane są tylko indeksy)
-    // indeksy to właśnie taki numer siedzenia.
-    // Na takim miejscu mogą znajdować się różne wartości.
-    // Tablicę można sobie wyobrazić ostatecznie w taki sposób:
-    // [0, 1, 2, 3, 4] - 5 miejsc w rzędzie, od 0 do 4
-    // [7, 4, 0, 8, 9] - 5 wartości, każda jest na jakimś miejscu
+    // Разделить текст на слова, обрабатывая множественные пробелы
+    const words = textTrimmed.split(/\s+/).filter(word => word.length > 0)
 
-    // wstawiamy do innerText długość tablicy "words".
-    // length użyte na tablicy zwraca jej długość, czyli ile posiada miejsc
     document.getElementById("count-words").innerText = words.length
 
-    // To jest String
-    // text = "The quick brown fox jumps over the lazy dog." 
-    // Teraz zamieniamy na tablice
-    // words = text.split(" ")
-    // [0,   1,     2, 3, 4, 5, 6, 7, 8, 9]
-    // [The, quick, ]
-
-
-    // jak wyliczyć ilość spacji w tekście?
-    // ustawiamy licznik spacji
+    // Подсчитать пробелы
     let spaceCounter = 0;
-
-    // tworzymy pętle i ustawiamy warunek text.length
-    // żeby nie przekroczyć długości Stringa - inaczej mówiąc
-    // pętla wykona się tyle razy, ile jest znaków w Stringu
     for (let i = 0; i < text.length; i++) {
-
-        // każdy znak wsadzamy do zmiennej character
         const character = text.charAt(i);
-
-        // sprawdzamy czy zmienna character zawiera spację
-        if (character === ' ') { // zauważ, że tutaj jest spacja pomiędzy apostrofami!
-
-            // jeżeli character to spacja,
-            // zwiększamy licznik spacji o 1
+        if (character === ' ') {
             spaceCounter += 1
         }
     }
-
-    // teraz tylko wkładamy licznik spacji do HTMLa
     document.getElementById("count-space").innerText = spaceCounter
 
-    // ----------------------------------------------
-    // liczba znaków włącznie ze spacjami i wszystkim
-    // ----------------------------------------------
-
+    // Количество символов с пробелами
     document.getElementById("count-character").innerText = text.length
 
-    // ------------------------
-    // liczba znaków bez spacji
-    // ------------------------
-
+    // Количество символов без пробелов
     const letterCounter = countLettersWithoutSpace(textTrimmed)
-
     document.getElementById("count-character-no-spaces").innerText = letterCounter
 
-    // --------------------
-    // czas czytania tekstu
-    // --------------------
+    // Количество предложений
+    const sentences = textTrimmed.split(/[.!?]+/).filter(s => s.trim().length > 0)
+    document.getElementById("count-sentences").innerText = sentences.length
 
-    const characterReadPerMinute = 200
+    // Самое длинное слово
+    let longest = '';
+    for (let word of words) {
+        if (word.length > longest.length) longest = word;
+    }
+    document.getElementById("longest-word").innerText = longest
 
-    const minutes = letterCounter / characterReadPerMinute
-    console.log(minutes)
+    // Средняя длина слова
+    let totalLength = 0;
+    for (let word of words) totalLength += word.length;
+    const avg = words.length > 0 ? (totalLength / words.length).toFixed(2) : 0;
+    document.getElementById("avg-word-length").innerText = avg
 
-    const seconds = minutes * 60
-    console.log(seconds)
+    // Процент заглавных букв
+    let upperCount = 0;
+    for (let char of textTrimmed) {
+        if (char >= 'A' && char <= 'Z') upperCount++;
+    }
+    const percent = textTrimmed.length > 0 ? ((upperCount / textTrimmed.length) * 100).toFixed(2) : 0;
+    document.getElementById("uppercase-percent").innerText = percent
 
-    document.getElementById("read-time").innerText = seconds
+    // Время чтения (слов в минуту)
+    const readTime = words.length > 0 ? ((words.length / 200) * 60).toFixed(0) : 0;
+    document.getElementById("read-time").innerText = readTime
 
 }
 
